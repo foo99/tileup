@@ -10,6 +10,7 @@ options = {
   auto_zoom_levels: nil,
   input_filename: nil,
   extension: nil,
+  in_threads: nil,
   output_dir: '.'
 
 }
@@ -20,6 +21,7 @@ OptionParser.new do |o|
   o.on('--tile-width=256', "Tile width, should normally equal tile height.") { |width| options[:tile_width] = width }
   o.on('--tile-height=256', "Tile height, should normally equal tile width.") { |height| options[:tile_height] = height }
   o.on('--auto-zoom=', Integer, "Automatically scale input image N times, must be a number."){ |zooms| options[:auto_zoom_levels] = zooms }
+  o.on('--in-threads=', Integer, "Use threads, must be a number.") { |in_threads| options[:in_threads] = in_threads }
   o.on('--output-dir=', "Output directory (will be created if it doesn't exist).") { |output_dir| options[:output_dir] = output_dir }
   o.on('--extension=', "Output file extension."){ |extension| options[:extension] = extension }
   o.on('--dont-extend-incomplete-tiles',

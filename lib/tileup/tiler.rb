@@ -2,6 +2,7 @@ require 'ostruct'
 require 'RMagick'
 require 'fileutils'
 require 'tileup/logger'
+require 'parallel'
 
 module TileUp
 
@@ -14,6 +15,7 @@ module TileUp
         tile_height: 256,
         filename_prefix: "map_tile",
         extension: nil,
+        in_threads: nil,
         output_dir: ".",
         extend_incomplete_tiles: true,
         verbose: false
@@ -71,8 +73,22 @@ module TileUp
         end
       end
 
+      # use thread size      
+      if @options.in_threads.nil?
+        @in_threads = 1
+      else
+        if @options.in_threads > tasks.size
+          @in_threads = tasks.size
+        else
+          @in_threads = @options.in_threads
+        end
+      end
+      @logger.info "Use threads #{@in_threads}"
+
       # run through tasks list
-      tasks.each do |task|
+      Parallel.each(tasks, in_threads: @options.in_threads) do |task|
+        @logger.info "Start task: #{task[:output_dir]}"
+        
         image = @image
         image_path = File.join(task[:output_dir], @filename_prefix)
         if task[:scale] != 1.0
