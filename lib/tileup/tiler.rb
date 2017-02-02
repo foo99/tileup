@@ -13,6 +13,7 @@ module TileUp
         tile_width: 256,
         tile_height: 256,
         filename_prefix: "map_tile",
+        extension: nil,
         output_dir: ".",
         extend_incomplete_tiles: true,
         verbose: false
@@ -20,7 +21,7 @@ module TileUp
       @options = OpenStruct.new(default_options.merge(options))
       @options.tile_width = @options.tile_width.to_i unless !@options.tile_width.respond_to? :to_i
       @options.tile_height = @options.tile_height.to_i unless !@options.tile_height.respond_to? :to_i
-      @extension = image_filename.split(".").last
+      @extension = @options.extension || image_filename.split(".").last
       @filename_prefix = @options.filename_prefix
       @logger = ConsoleLogger.new(:info, {verbose: @options.verbose})
 
